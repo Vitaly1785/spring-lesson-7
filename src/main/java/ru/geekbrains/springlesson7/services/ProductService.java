@@ -1,7 +1,5 @@
 package ru.geekbrains.springlesson7.services;
 
-import net.bytebuddy.build.HashCodeAndEqualsPlugin;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.springlesson7.models.Product;
@@ -45,11 +43,11 @@ public class ProductService {
         deleteProduct.ifPresent(productDao::delete);
     }
     @Transactional
-    public Optional<Product> getProductsMinPrice(){
+    public Iterable<Product> getProductsMinPrice(){
         return productDao.findAllByOrderByPriceDesc();
     }
     @Transactional
-    public Optional<Product> getProductMaxPrice(){
+    public Iterable<Product> getProductMaxPrice(){
         return productDao.findAllByOrderByPriceAsc();
     }
 }
