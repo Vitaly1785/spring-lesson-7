@@ -1,5 +1,7 @@
 package ru.geekbrains.springlesson7.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.springlesson7.models.Product;
@@ -16,8 +18,8 @@ public class ProductService {
         this.productDao = productDao;
     }
     @Transactional
-    public Iterable<Product> showAll(){
-        return productDao.findAll();
+    public Page<Product> showAll(Pageable pageable){
+        return productDao.findAll(pageable);
     }
     @Transactional
     public Optional<Product> findById(Long id){
@@ -43,11 +45,11 @@ public class ProductService {
         deleteProduct.ifPresent(productDao::delete);
     }
     @Transactional
-    public Iterable<Product> getProductsMinPrice(){
-        return productDao.findAllByOrderByPriceDesc();
+    public Page<Product> getProductsMinPrice(Pageable pageable){
+        return productDao.findAllByOrderByPriceDesc(pageable);
     }
     @Transactional
-    public Iterable<Product> getProductMaxPrice(){
-        return productDao.findAllByOrderByPriceAsc();
+    public Page<Product> getProductMaxPrice(Pageable pageable){
+        return productDao.findAllByOrderByPriceAsc(pageable);
     }
 }
