@@ -1,13 +1,15 @@
 package ru.geekbrains.springlesson7.productDao;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import ru.geekbrains.springlesson7.models.Product;
 
-import java.util.List;
-import java.util.Optional;
 
 
 public interface ProductDao extends CrudRepository<Product, Long> {
-    Iterable<Product>findAllByOrderByPriceAsc();
-    Iterable<Product>findAllByOrderByPriceDesc();
+    Page<Product> findAllByOrderByPriceAsc(Pageable pageable);
+    Page<Product>findAllByOrderByPriceDesc(Pageable pageable);
+
+    Page<Product> findAll(Pageable pageable);
 }

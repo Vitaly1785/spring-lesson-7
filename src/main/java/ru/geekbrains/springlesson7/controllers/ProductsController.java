@@ -1,14 +1,15 @@
 package ru.geekbrains.springlesson7.controllers;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.springlesson7.models.Product;
 import ru.geekbrains.springlesson7.services.ProductService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Controller
 @RequestMapping("/products")
@@ -20,9 +21,11 @@ public class ProductsController {
     }
 
     @GetMapping()
-    public String showAll(Model model){
-        model.addAttribute("products", sortProduct());
-        model.addAttribute("sort", sortMethod);
+    public String showAll(@PageableDefault(size = 10) Pageable pageable,
+                            Model model){
+        Page<Product> page = sortProduct(pageable);
+        model.addAttribute("page", page);
+//        model.addAttribute("sort", sortMethod);
         return "products/show";
     }
 
@@ -62,19 +65,22 @@ public class ProductsController {
         sortMethod = sorted;
         return "redirect:/products";
     }
-    public Iterable<Product> sortProduct(){
-        Iterable<Product> products = null;
-        switch (sortMethod){
-            case "ASC":
-                products = productService.getProductMaxPrice();
-                break;
-            case "DESC":
-                products = productService.getProductsMinPrice();
-                break;
-            default:
-                products = productService.showAll();
-                break;
-        }
+
+    public Page<Product> sortProduct(Pageable pageable) {
+        Page<Product> products = null;
+
+                switch (sortMethod) {
+                    case "ASC":
+                        products = productService.getProductMaxPrice(pageable);
+                        break;
+                    case "DESC":
+                        products = productService.getProductsMinPrice(pageable);
+                        break;
+                    default:
+                        products = productService.showAll(pageable);
+                        break;
+                }
         return products;
+        }
     }
-}
+
