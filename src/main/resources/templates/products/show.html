@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Products</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/products/{sorted}(sorted=${'ASC'})}">
+    <input type="submit" value="Minimum">
+</form>
+<form th:method="POST" th:action="@{/products/{sorted}(sorted=${'DESC'})}">
+    <input type="submit" value="Maximum">
+</form>
+<form th:method="POST" th:action="@{/products/{sorted}(sorted=${'None'})}">
+    <input type="submit" value="Default">
+</form>
+<table border="2px" width="200px" bgcolor="#9acd32">
+    <thead>
+    <tr>
+        <th style="width: 5%">Product</th>
+        <th style="width: 60%">Price</th>
+    </tr>
+    </thead>
+    <tr th:each="product: ${products}">
+        <td><a th:href="@{/products/{id}(id=${product.getId()})}"
+               th:text="${product.getTitle()}">product</a></td>
+        <td th:text="${product.price}">price</td>
+        <td>
+            <form th:method="DELETE" th:action="@{/products/{id}(id=${product.getId()})}">
+                <input type="submit" value="Delete Product">
+            </form>
+        </td>
+    </tr>
+</table>
+
+<br/>
+<hr/>
+<a th:href="@{/products/new}">Add new Product</a>
+
+</body>
+</html>
